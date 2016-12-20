@@ -1,0 +1,28 @@
+#ifndef __DOORTALKDRIVERS_IOCTL_H__
+#define __DOORTALKDRIVERS_IOCTL_H__
+
+// SFR OPERATION
+#define ON_OPS						1
+#define ON_DELAY_OPS				2
+#define SLOW_OPS	    			3
+#define	FAST_OPS					4
+#define	ONCE_OPS					5
+#define	TWICE_OPS					6
+#define	RECOVERY_OPS				7
+#define	OFF_OPS 					8
+#define	IRLED_ON_OPS				9
+#define	IRLED_OFF_OPS				10
+#define	SENSOR_ENABLED_OPS			11
+#define	SENSOR_DISABLED_OPS			12
+#define	MOTION_SENSITIVITY_OPS		13
+#define	SENSOR_STATUS_OPS			14
+#define	ETHERNET_DISABLED_OPS		15
+#define	ETHERNET_ENABLED_OPS		16
+#define	DOORLOCK_DISABLED_OPS		17
+#define	DOORLOCK_ENABLED_OPS		18
+#define GETRELAY_OPS				19
+
+	//i2c
+
+
+#endif //__DOORTALKDRIVERS_IOCTL_H__

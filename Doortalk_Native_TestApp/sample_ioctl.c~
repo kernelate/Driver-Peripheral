@@ -1,0 +1,228 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+
+#include "sample_ioctl.h"
+#include "led_main.h"
+
+#define DEVICE_NAME "/dev/DoorTalk_Drivers"
+
+#define DEBUG_VERBOSE   0
+
+int fd = 0;
+
+DTDRIVERS_DATA dtdrivers_data;
+
+void init() {
+	fd = open(DEVICE_NAME, O_RDWR);
+	if (fd <= 0) {
+		printf("open() Failed\n");
+		exit(-1);
+	}
+}
+
+void deinit() {
+	close(fd);
+}
+
+void display_instruction(char* argv[]) {
+	printf("\nInvalid parameters !!!\n");
+	printf("%s [1] ON\n", argv[0]);
+	printf("%s [2] LOADING\n", argv[0]);
+	printf("%s [3] AP_MODE\n", argv[0]);
+	printf("%s [4] ERROR\n", argv[0]);
+	printf("%s [5] STARTUP!\n", argv[0]);
+	printf("%s [6] OFF\n", argv[0]);
+	printf("%s [7] IRLED_LOW\n", argv[0]);
+	printf("%s [8] IRLED_MID!\n", argv[0]);
+	printf("%s [9] IRLED_HIGH\n", argv[0]);
+	printf("%s [10] IRLED_OFF\n", argv[0]);
+	printf("%s [11] SENSOR!\n", argv[0]);
+
+}
+
+int check_valid_parameters(int argc, char* argv[], int x) {
+	int i;
+	int operation = 0;
+
+#if DEBUG_VERBOSE
+	printf("argc == %d\n", argc); /*TODO*/
+	printf("argv == %c\n", *(argv[1])); /*TODO*/
+	for(i=0; i<argc; i++) printf("argv[%d] == [%s]\n", i, argv[i]);
+#endif
+
+	if (argc < 2)
+		goto err1;
+
+	operation = x;
+	printf("check%d\n",operation);
+	//led_data.special_function_register = VA_GPIO_BASE + strtol(argv[2], NULL, 16);
+	dtdrivers_data.value = 0;
+
+	switch (operation) {
+	case ON_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case LOADING_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case AP_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+	case ERROR_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case STARTUP_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case OFF_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case LOW_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case MID_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case HIGH_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case IRLED_OFF_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	case SENSOR_OPS:
+		if (argc != 2)
+			goto err1;
+		break;
+
+	default:
+		goto err1;
+	}
+
+
+#if DEBUG_VERBOSE
+	printf("addr=0x%x val=0x%x\n", dtdrivers_data.special_function_register, dtdrivers_data.value);
+#endif
+	return operation;
+
+	err1: display_instruction(argv);
+	exit(0);
+}
+
+void evaluate_operation(int operation) {
+	int ret;
+
+	printf("%d\n",operation);
+
+	switch (operation) {
+
+	case ON_OPS:
+		if (ioctl(fd, ON, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case LOADING_OPS:
+		if (ioctl(fd, LOADING, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case AP_OPS:
+		if (ioctl(fd, AP_MODE, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+	case ERROR_OPS:
+		if (ioctl(fd, ERROR, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case STARTUP_OPS:
+		if (ioctl(fd, STARTUP, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case OFF_OPS:
+		if (ioctl(fd, OFF, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case LOW_OPS:
+		if (ioctl(fd, IRLED_LOW, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case MID_OPS:
+		if (ioctl(fd, IRLED_MID, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case HIGH_OPS:
+		if (ioctl(fd, IRLED_HIGH, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case IRLED_OFF_OPS:
+		if (ioctl(fd, IRLED_OFF, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		break;
+
+	case SENSOR_OPS:
+		if (ioctl(fd, SENSOR, &dtdrivers_data) < 0) {
+			printf("ioctl() Failed\n");
+		}
+		ret = dtdrivers_data.value;
+		break;
+	}
+}
+
+int main(int argc, char* argv[]) {
+	int operation = 0;
+	int x;
+	
+	x = atoi(argv[1]);
+
+	printf("%s\n",argv[1]);
+
+	printf("LED INDICATOR IOCL\n");
+
+	init();
+
+	operation = check_valid_parameters(argc, argv, x);
+
+	evaluate_operation(operation);
+
+	deinit();
+	return 0;
+}

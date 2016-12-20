@@ -1,0 +1,15 @@
+SOURCE_FILE=    \
+   sample_ioctl.c
+COMPILER='/home/ntekcom11/FriendlyARM/toolschain/4.5.1/bin/arm-linux-gcc' 
+FILENAME='doortalk_app.out'
+NATIVE_FILENAME='RealTermNative'
+PARM=-static -o $(FILENAME) 
+NATIVE_PARM=-o $(NATIVE_FILENAME);
+
+
+default:
+	$(COMPILER) $(SOURCE_FILE) $(PARM)
+clean:
+	rm $(FILENAME) $(NATIVE_FILENAME)
+native:
+	g++ $(SOURCE_FILE) $(NATIVE_PARM)

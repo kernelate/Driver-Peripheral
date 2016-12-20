@@ -1,0 +1,20 @@
+#ifndef __DOORTALKDRIVERS_IOCTL_H__
+#define __DOORTALKDRIVERS_IOCTL_H__
+
+// SFR OPERATION
+#define ON_OPS			'1'
+#define LOADING_OPS	  	'2'
+#define	AP_OPS			'3'
+#define	ERROR_OPS		'4'
+#define	STARTUP_OPS 		'5'
+#define	OFF_OPS 		'6'
+#define	LOW_OPS			'7'
+#define	MID_OPS			'8'
+#define	HIGH_OPS		'9'
+#define	IRLED_OFF_OPS		10
+#define	SENSOR_OPS		11
+
+	//i2c
+
+
+#endif //__DOORTALKDRIVERS_IOCTL_H__
